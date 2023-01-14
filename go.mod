@@ -1,4 +1,4 @@
-module github.com/veerdone/gorm-gen
+module gorm.io/gen
 
 go 1.18
 
@@ -37,3 +37,5 @@ require (
 	golang.org/x/sys v0.0.0-20221006211917-84dc82d7e875 // indirect
 	golang.org/x/text v0.3.7 // indirect
 )
+
+replace gorm.io/gen => github.com/veerdone/gorm-gen master
