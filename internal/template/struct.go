@@ -7,7 +7,7 @@ const (
 		{{.QueryStructName}}Do
 		` + fields + `
 	}
-	` + tableMethod + asMethond + updateFieldMethod + getFieldMethod + fillFieldMapMethod + cloneMethod + replaceMethod + relationship + defineMethodStruct
+	` + fillFieldArray + tableMethod + asMethond + updateFieldMethod + getFieldMethod + fillFieldMapMethod + cloneMethod + replaceMethod + relationship + defineMethodStruct
 
 	// TableQueryStructWithContext table query struct with context
 	TableQueryStructWithContext = createMethod + `
@@ -52,6 +52,7 @@ const (
 		{{end}}
 
 		_{{$.QueryStructName}}.fillFieldMap()
+		_{{$.QueryStructName}}.fillFieldArray()
 		
 		return _{{.QueryStructName}}
 	}
@@ -72,6 +73,7 @@ const (
 	{{end}}
 
 	fieldMap  map[string]field.Expr
+	FieldArray []field.Expr
 `
 	tableMethod = `
 func ({{.S}} {{.QueryStructName}}) Table(newTableName string) *{{.QueryStructName}} { 
@@ -96,6 +98,7 @@ func ({{.S}} *{{.QueryStructName}}) updateTableName(table string) *{{.QueryStruc
 	{{end}}
 	
 	{{.S}}.fillFieldMap()
+	{{.S}}.fillFieldArray()
 
 	return {{.S}}
 }
@@ -136,6 +139,14 @@ func ({{.S}} *{{.QueryStructName}}) fillFieldMap() {
 	{{if not .IsRelation -}}
 		{{- if .ColumnName -}}{{$.S}}.fieldMap["{{.ColumnName}}"] = {{$.S}}.{{.Name}}{{- end -}}
 	{{end}}
+	{{end -}}
+}
+`
+	fillFieldArray = `
+func ({{.S}} *{{.QueryStructName}}) fillFieldArray() {
+	{{.S}}.FieldArray = make([]field.Expr, {{len .Fields}})
+	{{range $i, $f := .Fields -}}
+		{{$.S}}.FieldArray[{{$i}}] = {{$.S}}.{{$f.Name}}
 	{{end -}}
 }
 `
