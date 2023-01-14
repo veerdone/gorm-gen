@@ -1,4 +1,4 @@
-module gorm.io/gen
+module github.com/veerdone/gorm-gen
 
 go 1.18
 
